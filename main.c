@@ -1,5 +1,5 @@
-#include <pbc/pbc.h>
 #include <stdio.h>
+#include "utils.h"
 
 void rnd_non_zero(element_t e) {
     element_random(e);
@@ -46,7 +46,12 @@ void run() {
 }
 
 int main() {
-    run();
+    gmp_randstate_t state;
+    mpz_t a, q;
+    mpz_set_ui(q, 5);
+    gmp_randinit_default(state);
+    mpz_urandomm(a, state, q);
+    gmp_printf("Random q: %Zd\n", a);
     return 0;
 }
 
