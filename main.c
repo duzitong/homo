@@ -1,60 +1,31 @@
 #include <stdio.h>
 #include "utils.h"
+#include "keygen.h"
 
-void rnd_non_zero(element_t e) {
-    element_random(e);
-    while (element_is0(e)) {
-        element_random(e);
-    }
-}
-
-void rnd_non_equals(element_t e, element_t p) {
-    element_random(e);
-    while (element_is0(e) || !element_cmp(e, p)) {
-        element_random(e);
-    }
-}
-
-void run() {
+int main() {
+    // init pairing
     pairing_t pairing;
-    element_t g, h;
-    element_t public_key, secret_key;
-    element_t sig;
-    element_t temp1, temp2;
-    element_t r1;
-    gmp_randstate_t state;
-    mpz_t a, q;
-     
     char param[1024];
     size_t count = fread(param, 1, 1024, stdin);
     if (!count) pbc_die("input error");
     pairing_init_set_buf(pairing, param, count);
 
-    read_q(q, param);
-    gmp_printf("q: %Zd\n", q);
-
+    // init g & gt
+    element_t g, h, gt;
     element_init_G1(g, pairing);
     element_init_G2(h, pairing);
     rnd_non_zero(g);
-    rnd_non_equals(h, g);
-    element_init_GT(r1, pairing);
-    // element_init_GT(temp2, pairing);
-    // element_init_Zr(secret_key, pairing);
-
+    rnd_non_zero(h);
+    element_init_GT(gt, pairing);
     pairing_pp_t pp;
-    pairing_pp_init(pp, g, pairing); // x is some element of G1
-    pairing_pp_apply(r1, h, pp);
-    element_printf("g: %B\n", g);
-    element_printf("h: %B\n", h);
-    element_printf("r1: %B\n", r1);
-    rnd_init(state);
-    rnd_q(a, state, q);
-    gmp_printf("Random q: %Zd\n", a);
-    printf("Finished.\n");
-}
+    pairing_pp_init(pp, g, pairing);
+    pairing_pp_apply(gt, h, pp);
+    pairing_pp_clear(pp);
+    struct Key k;
+    init_key(&k, 2, pairing, g, gt);
+    print_key(k);
+    free_key(k);
 
-int main() {
-    run();
     return 0;
 }
 
