@@ -1,6 +1,6 @@
 #include "keygen.h"
 
-void init_key(struct Key *k, int l, pairing_t pairing, element_t g, element_t gt) {
+void init_skey(struct SKey *k, int l, pairing_t pairing, element_t g, element_t gt) {
     element_t a, b, beta, inv_beta;
     element_t *a1, *a2;
 
@@ -20,12 +20,11 @@ void init_key(struct Key *k, int l, pairing_t pairing, element_t g, element_t gt
         rnd_non_zero(a2[i]);
     }
 
-    // Computing exponentials
     element_pp_t g_pp, gt_pp;
     element_pp_init(g_pp, g);
     element_pp_init(gt_pp, gt);
-    element_init_G1(k->id, pairing);
-    element_pp_pow_zn(k->id, beta, g_pp);
+    element_init_G1(k->id.g_beta, pairing);
+    element_pp_pow_zn(k->id.g_beta, beta, g_pp);
     element_init_Zr(k->sk.beta, pairing);
     element_set(k->sk.beta, beta);
     element_init_Zr(k->sk.a, pairing);
@@ -40,7 +39,7 @@ void init_key(struct Key *k, int l, pairing_t pairing, element_t g, element_t gt
         element_init_GT(k->pk.gt_a1[i], pairing);
         element_pp_pow_zn(k->pk.gt_a1[i], a1[i], gt_pp);
         element_init_G1(k->pk.g_a2[i], pairing);
-        element_pp_pow_zn(k->pk.g_a2[i], a1[i], g_pp);
+        element_pp_pow_zn(k->pk.g_a2[i], a2[i], g_pp);
     }
     element_init_G1(k->pk.g_beta, pairing);
     element_pp_pow_zn(k->pk.g_beta, beta, g_pp);
@@ -55,13 +54,13 @@ void init_key(struct Key *k, int l, pairing_t pairing, element_t g, element_t gt
     
     k->l = l;
 
-    // Clean
     element_pp_clear(g_pp);
     element_pp_clear(gt_pp);
 }
 
-void print_key(struct Key k) {
-    element_printf("id: %B\n", k.id);
+void print_skey(struct SKey k) {
+    element_printf("id:\n");
+    element_printf("    g_beta: %B\n", k.id.g_beta);
     element_printf("sk:\n");
     element_printf("    beta: %B\n", k.sk.beta);
     element_printf("    a: %B\n", k.sk.a);
@@ -93,9 +92,127 @@ void print_key(struct Key k) {
     element_printf("    gt_b: %B\n", k.pk.gt_b);
 }
 
-void free_key(struct Key k) {
+void free_skey(struct SKey k) {
     free(k.sk.a1);
     free(k.sk.a2);
     free(k.pk.gt_a1);
     free(k.pk.g_a2);
+}
+
+void init_vkey(struct VKey *vk, int l, pairing_t pairing, element_t g, element_t gt) {
+    element_t alpha;
+    element_t *a1, *a2;
+
+    element_init_Zr(alpha, pairing);
+    rnd_non_zero(alpha);
+
+    a1 = (element_t*) malloc(sizeof(element_t) * l);
+    a2 = (element_t*) malloc(sizeof(element_t) * l);
+    for (int i = 0; i < l; i++) {
+        element_init_Zr(a1[i], pairing);
+        rnd_non_zero(a1[i]);
+        element_init_Zr(a2[i], pairing);
+        rnd_non_zero(a2[i]);
+    }
+
+    element_init_Zr(vk->mk.alpha, pairing);
+    element_set(vk->mk.alpha, alpha);
+    vk->mk.a1 = a1;
+    vk->mk.a2 = a2;
+
+    element_pp_t g_pp, gt_pp;
+    element_pp_init(g_pp, g);
+    element_pp_init(gt_pp, gt);
+    vk->aux.gt_a1 = (element_t*) malloc(sizeof(element_t) * l);
+    vk->aux.g_a2 = (element_t*) malloc(sizeof(element_t) * l);
+    for (int i = 0; i < l; i++) {
+        element_init_GT(vk->aux.gt_a1[i], pairing);
+        element_pp_pow_zn(vk->aux.gt_a1[i], a1[i], gt_pp);
+        element_init_G1(vk->aux.g_a2[i], pairing);
+        element_pp_pow_zn(vk->aux.g_a2[i], a2[i], g_pp);
+    }
+
+    vk->l = l;
+
+    element_pp_clear(g_pp);
+    element_pp_clear(gt_pp);
+}
+
+void print_vkey(struct VKey vk) {
+    element_printf("mk:\n");
+    element_printf("    alpha: %B\n", vk.mk.alpha);
+    element_printf("    a1:");
+    for (int i = 0; i < vk.l; i++) {
+        element_printf(" %B", vk.mk.a1[i]);
+    }
+    element_printf("\n");
+    element_printf("    a2:");
+    for (int i = 0; i < vk.l; i++) {
+        element_printf(" %B", vk.mk.a2[i]);
+    }
+    element_printf("\n");
+    element_printf("aux:\n");
+    element_printf("    gt_a1:");
+    for (int i = 0; i < vk.l; i++) {
+        element_printf(" %B", vk.aux.gt_a1[i]);
+    }
+    element_printf("\n");
+    element_printf("    g_a2:");
+    for (int i = 0; i < vk.l; i++) {
+        element_printf(" %B", vk.aux.g_a2[i]);
+    }
+    element_printf("\n");
+}
+
+void free_vkey(struct VKey vk) {
+    free(vk.mk.a1);
+    free(vk.mk.a2);
+    free(vk.aux.gt_a1);
+    free(vk.aux.g_a2);
+}
+
+void init_srkey(struct SRKey *srk, struct SK sk, struct AUX aux, int l, pairing_t pairing) {
+    srk->rk.g_a2_a1 = (element_t*) malloc(sizeof(element_t) * l);
+    for (int i = 0; i < l; i++) {
+        element_init_G1(srk->rk.g_a2_a1[i], pairing);
+        element_pow_zn(srk->rk.g_a2_a1[i], aux.g_a2[i], sk.a1[i]);
+    }
+
+    srk->l = l;
+}
+
+void print_srkey(struct SRKey srk) {
+    element_printf("rk:\n");
+    element_printf("    g_a2_a1:");
+    for (int i = 0; i < srk.l; i++) {
+        element_printf(" %B", srk.rk.g_a2_a1[i]);
+    }
+    element_printf("\n");
+}
+
+void free_srkey(struct SRKey srk) {
+    free(srk.rk.g_a2_a1);
+}
+
+void init_vrkey(struct VRKey *vrk, struct PK *pk, struct MK mk, struct RK *rk, int n, pairing_t pairing) {
+    vrk->ak.g_inv_beta_alpha = (element_t*) malloc(sizeof(element_t) * n);
+    for (int i = 0; i < n; i++) {
+        element_init_G1(vrk->ak.g_inv_beta_alpha[i], pairing);
+        element_pow_zn(vrk->ak.g_inv_beta_alpha[i], pk[i].g_inv_beta, mk.alpha);
+    }
+
+    vrk->n = n;
+}
+
+void print_vrkey(struct VRKey vrk) {
+    element_printf("ak:\n");
+    element_printf("    g_inv_beta_alpha:");
+    for (int i = 0; i < vrk.n; i++) {
+        element_printf(" %B", vrk.ak.g_inv_beta_alpha[i]);
+    }
+    element_printf("\n");
+}
+
+void free_vrkey(struct VRKey vrk) {
+    free(vrk.ak.g_inv_beta_alpha);
 }
