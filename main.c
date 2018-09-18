@@ -16,7 +16,7 @@ int main() {
     // init g & gt
     element_t g, h, gt;
     element_init_G1(g, pairing);
-    element_init_G2(h, pairing);
+    element_init_G1(h, pairing);
     rnd_non_zero(g);
     rnd_non_zero(h);
     element_init_GT(gt, pairing);
@@ -60,11 +60,24 @@ int main() {
     printf("===== enf =====\n");
     print_enfunc(enf);
 
+    struct EnInput eni;
+    element_t *m;
+    m = (element_t*) malloc(sizeof(element_t) * (l-1));
+    for (int i = 0; i < l-1; i++) {
+        element_init_Zr(m[i], pairing);
+        rnd_non_zero(m[i]);
+    }
+    init_eninput(&eni, sk, m, l, g, gt, pairing);
+    printf("===== eni =====\n");
+    print_eninput(eni);
+
 
     free_skey(sk);
     free_vkey(vk);
     free_srkey(srk);
     free_vrkey(vrk);
+    free_eninput(eni);
+    free(m);
 
     return 0;
 }
