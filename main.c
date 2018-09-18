@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "utils.h"
 #include "keygen.h"
+#include "enc.h"
 
 int main() {
     // init pairing
@@ -23,16 +24,21 @@ int main() {
     pairing_pp_init(pp, g, pairing);
     pairing_pp_apply(gt, h, pp);
     pairing_pp_clear(pp);
+
+    
     struct SKey sk;
     init_skey(&sk, l, pairing, g, gt);
+    printf("===== sk =====\n");
     print_skey(sk);
 
     struct VKey vk;
     init_vkey(&vk, l, pairing, g, gt);
+    printf("===== vk =====\n");
     print_vkey(vk);
 
     struct SRKey srk;
     init_srkey(&srk, sk.sk, vk.aux, l, pairing);
+    printf("===== srk =====\n");
     print_srkey(srk);
 
     struct VRKey vrk;
@@ -41,7 +47,19 @@ int main() {
     pk[0] = sk.pk;
     rk[0] = srk.rk;
     init_vrkey(&vrk, pk, vk.mk, rk, 1, pairing);
+    printf("===== vrk =====\n");
     print_vrkey(vrk);
+
+    struct F f;
+    init_f(&f, 1, pairing);
+    printf("===== f =====\n");
+    print_f(f);
+
+    struct EnFunc enf;
+    init_enfunc(&enf, f, vrk.ak, vk.mk, vk.l ,vrk.n);
+    printf("===== enf =====\n");
+    print_enfunc(enf);
+
 
     free_skey(sk);
     free_vkey(vk);

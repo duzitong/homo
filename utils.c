@@ -13,3 +13,9 @@ void rnd_non_equals(element_t e, element_t p) {
         element_random(e);
     }
 }
+
+void free_non_null(void *a) {
+    if (a) {
+        free(a);
+    }
+}

@@ -93,10 +93,15 @@ void print_skey(struct SKey k) {
 }
 
 void free_skey(struct SKey k) {
-    free(k.sk.a1);
-    free(k.sk.a2);
-    free(k.pk.gt_a1);
-    free(k.pk.g_a2);
+    free_non_null(k.sk.a1);
+    free_non_null(k.sk.a2);
+    free_non_null(k.pk.gt_a1);
+    free_non_null(k.pk.g_a2);
+
+    k.sk.a1 = NULL;
+    k.sk.a2 = NULL;
+    k.pk.gt_a1 = NULL;
+    k.pk.g_a2 = NULL;
 }
 
 void init_vkey(struct VKey *vk, int l, pairing_t pairing, element_t g, element_t gt) {
@@ -165,10 +170,15 @@ void print_vkey(struct VKey vk) {
 }
 
 void free_vkey(struct VKey vk) {
-    free(vk.mk.a1);
-    free(vk.mk.a2);
-    free(vk.aux.gt_a1);
-    free(vk.aux.g_a2);
+    free_non_null(vk.mk.a1);
+    free_non_null(vk.mk.a2);
+    free_non_null(vk.aux.gt_a1);
+    free_non_null(vk.aux.g_a2);
+
+    vk.mk.a1 = NULL;
+    vk.mk.a2 = NULL;
+    vk.aux.gt_a1 = NULL;
+    vk.aux.g_a2 = NULL;
 }
 
 void init_srkey(struct SRKey *srk, struct SK sk, struct AUX aux, int l, pairing_t pairing) {
@@ -191,7 +201,8 @@ void print_srkey(struct SRKey srk) {
 }
 
 void free_srkey(struct SRKey srk) {
-    free(srk.rk.g_a2_a1);
+    free_non_null(srk.rk.g_a2_a1);
+    srk.rk.g_a2_a1 = NULL;
 }
 
 void init_vrkey(struct VRKey *vrk, struct PK *pk, struct MK mk, struct RK *rk, int n, pairing_t pairing) {
@@ -214,5 +225,6 @@ void print_vrkey(struct VRKey vrk) {
 }
 
 void free_vrkey(struct VRKey vrk) {
-    free(vrk.ak.g_inv_beta_alpha);
+    free_non_null(vrk.ak.g_inv_beta_alpha);
+    vrk.ak.g_inv_beta_alpha = NULL;
 }

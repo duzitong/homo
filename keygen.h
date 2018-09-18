@@ -1,9 +1,8 @@
 #pragma once
-#include <pbc/pbc.h>
 #include "utils.h"
 
 /*
- * Two occurence of a1, a2 makes naming really confusing.
+ * Two occurences of a1, a2 make naming really confusing.
  * Try your best to understand!
  */
 
