@@ -1,5 +1,5 @@
 #!/bin/bash
 
 make
-./homo < test.param
+./homo < param/test.param
 
