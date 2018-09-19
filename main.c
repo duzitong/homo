@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "keygen.h"
 #include "enc.h"
+#include "compute.h"
 
 int main() {
     // init pairing
@@ -71,6 +72,12 @@ int main() {
     printf("===== eni =====\n");
     print_eninput(eni);
 
+    struct Omega omega;
+    struct EnInput eni_arr[1];
+    eni_arr[0] = eni;
+    compute(&omega, pk, enf.phi, eni_arr, rk, vrk, l, 1, pairing);
+    printf("===== omega =====\n");
+    print_omega(omega);
 
     free_skey(sk);
     free_vkey(vk);
@@ -78,6 +85,7 @@ int main() {
     free_vrkey(vrk);
     free_eninput(eni);
     free(m);
+    free_omega(omega);
 
     return 0;
 }

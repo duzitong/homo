@@ -137,7 +137,7 @@ void print_eninput(struct EnInput eni) {
     }
     element_printf("\n");
     element_printf("    gt_r_gt_a1_k: %B\n", eni.c.gt_r_gt_a1_k);
-    element_printf("    flag: %c", eni.c.flag);
+    element_printf("    flag: %c\n", eni.c.flag);
 }
 
 void free_eninput(struct EnInput eni) {
