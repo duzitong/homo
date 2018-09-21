@@ -56,6 +56,11 @@ int main() {
     printf("===== f =====\n");
     print_f(f);
 
+    struct FKey fk;
+    init_fkey(&fk, f, 0, g, pairing);
+    printf("===== fk =====\n");
+    print_fkey(fk);
+
     struct EnFunc enf;
     init_enfunc(&enf, f, vrk.ak, vk.mk, vk.l ,vrk.n);
     printf("===== enf =====\n");
@@ -68,7 +73,7 @@ int main() {
         element_init_Zr(m[i], pairing);
         rnd_non_zero(m[i]);
     }
-    init_eninput(&eni, sk, m, l, g, gt, pairing);
+    init_eninput(&eni, fk, sk, m, l, g, gt, pairing);
     printf("===== eni =====\n");
     print_eninput(eni);
 

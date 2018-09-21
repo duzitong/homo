@@ -23,6 +23,21 @@ void free_f(struct F f) {
     f.q = NULL;
 }
 
+void init_fkey(struct FKey *fk, struct F f, int index, element_t g, pairing_t pairing) {
+    element_init_G1(fk->sk, pairing);
+    rnd_non_zero(fk->sk);
+    element_init_GT(fk->pk, pairing);
+    element_t tmp;
+    element_init_G1(tmp, pairing);
+    element_pow_zn(tmp, g, f.q[index]);
+    element_pairing(fk->pk, tmp, fk->sk);
+}
+
+void print_fkey(struct FKey fk) {
+    element_printf("sk: %B\n", fk.sk);
+    element_printf("pk: %B\n", fk.pk);
+}
+
 void init_enfunc(struct EnFunc *enf, struct F f, struct AK ak, struct MK mk, int l, int n) {
     enf->phi.f = f;
     enf->phi.ak = ak;
@@ -68,6 +83,7 @@ void print_enfunc(struct EnFunc enf) {
     element_printf("\n");
 }
 
+// Deprecated
 void H(element_t mu, element_t g_a, element_t x, element_t g, element_t y, pairing_t pairing) {
     element_init_G1(mu, pairing);
     element_pow_zn(mu, g_a, x);
@@ -77,7 +93,7 @@ void H(element_t mu, element_t g_a, element_t x, element_t g, element_t y, pairi
     element_mul(mu, mu, tmp);
 }
 
-void init_eninput(struct EnInput *eni, struct SKey sk, element_t *m, int l, element_t g, element_t gt, pairing_t pairing) {
+void init_eninput(struct EnInput *eni, struct FKey fk, struct SKey sk, element_t *m, int l, element_t g, element_t gt, pairing_t pairing) {
     element_t x,y,r,k;
     element_init_Zr(x, pairing);
     rnd_non_zero(x);
@@ -89,7 +105,7 @@ void init_eninput(struct EnInput *eni, struct SKey sk, element_t *m, int l, elem
     rnd_non_zero(k);
 
     element_init_G1(eni->sigma, pairing);
-    H(eni->sigma, sk.pk.g_a, x, g, y, pairing);
+    element_set(eni->sigma, fk.sk);
 
     element_pp_t g_pp, gt_pp;
     element_pp_init(g_pp, g);

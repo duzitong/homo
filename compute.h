@@ -13,7 +13,6 @@ struct CP {
 struct Omega {
     struct CP cp;
     element_t sigma;
-    int n;
 };
 
 void compute(struct Omega *, struct PK *, struct Phi, struct EnInput *, struct RK *, struct VRKey, int, int, pairing_t);

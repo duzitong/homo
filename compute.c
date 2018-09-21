@@ -54,8 +54,6 @@ void compute(struct Omega *omega, struct PK *pk, struct Phi phi, struct EnInput 
         element_pairing(tmp, tmp1, vrk.ak.g_inv_beta_alpha[j]);
         element_mul(omega->sigma, omega->sigma, tmp);
     }
-
-    omega->n = n;
 }
 
 void print_omega(struct Omega omega) {

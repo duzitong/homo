@@ -6,6 +6,11 @@ struct F {
     int n;
 };
 
+struct FKey {
+    element_t sk;
+    element_t pk;
+};
+
 struct Phi {
     struct F f;
     struct AK ak;
@@ -41,11 +46,15 @@ void init_f(struct F *, int, pairing_t);
 void print_f(struct F);
 void free_f(struct F);
 
+void init_fkey(struct FKey *, struct F, int, element_t, pairing_t);
+void print_fkey(struct FKey);
+
 void init_enfunc(struct EnFunc *, struct F, struct AK, struct MK, int, int);
 void print_enfunc(struct EnFunc);
 
+// Deprecated
 void H(element_t, element_t, element_t, element_t, element_t, pairing_t);
 
-void init_eninput(struct EnInput *, struct SKey, element_t *, int, element_t, element_t, pairing_t);
+void init_eninput(struct EnInput *, struct FKey, struct SKey, element_t *, int, element_t, element_t, pairing_t);
 void print_eninput(struct EnInput);
 void free_eninput(struct EnInput);
