@@ -93,7 +93,8 @@ void H(element_t mu, element_t g_a, element_t x, element_t g, element_t y, pairi
     element_mul(mu, mu, tmp);
 }
 
-void init_eninput(struct EnInput *eni, struct FKey fk, struct SKey sk, element_t *m, int l, element_t g, element_t gt, pairing_t pairing) {
+void init_eninput(struct EnInput *eni, struct FKey fk, struct SKey sk, element_t *m, struct PP pp, element_t g, element_t gt, pairing_t pairing) {
+    int l = pp.l;
     element_t x,y,r,k;
     element_init_Zr(x, pairing);
     rnd_non_zero(x);
@@ -113,7 +114,7 @@ void init_eninput(struct EnInput *eni, struct FKey fk, struct SKey sk, element_t
     element_t tmp;
     element_init_G1(tmp, pairing);
     for (int i = 0; i < l-1; i++) {
-        element_pp_pow_zn(tmp, m[i], g_pp);
+        element_pow_zn(tmp, pp.g[i], m[i]);
         element_mul(eni->sigma, eni->sigma, tmp);
     }
     element_pow_zn(eni->sigma, eni->sigma, sk.sk.beta);

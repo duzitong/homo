@@ -1,5 +1,27 @@
 #include "keygen.h"
 
+void init_pp(struct PP *pp, int l, pairing_t pairing) {
+    pp->g = (element_t*) malloc(sizeof(element_t) * l);
+    for (int i = 0; i < l; i++) {
+        element_init_G1(pp->g[i], pairing);
+        rnd_non_zero(pp->g[i]);
+    }
+    pp->l = l;
+}
+
+void print_pp(struct PP pp) {
+    element_printf("g: ");
+    for (int i = 0; i < pp.l; i++) {
+        element_printf(" %B", pp.g[i]);
+    }
+    element_printf("\n");
+}
+
+void free_pp(struct PP *pp) {
+    free_non_null(pp->g);
+    pp->g = NULL;
+}
+
 void init_skey(struct SKey *k, int l, pairing_t pairing, element_t g, element_t gt) {
     element_t a, b, beta, inv_beta;
     element_t *a1, *a2;

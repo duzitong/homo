@@ -3,6 +3,7 @@
 #include "keygen.h"
 #include "enc.h"
 #include "compute.h"
+#include "verify.h"
 
 int main() {
     // init pairing
@@ -12,7 +13,7 @@ int main() {
     if (!count) pbc_die("input error");
     pairing_init_set_buf(pairing, param, count);
 
-    int l = 2;
+    int l = 4;
 
     // init g & gt
     element_t g, h, gt;
@@ -21,11 +22,12 @@ int main() {
     rnd_non_zero(g);
     rnd_non_zero(h);
     element_init_GT(gt, pairing);
-    pairing_pp_t pp;
-    pairing_pp_init(pp, g, pairing);
-    pairing_pp_apply(gt, h, pp);
-    pairing_pp_clear(pp);
+    element_pairing(gt, g, h);
 
+    struct PP pp;
+    init_pp(&pp, l, pairing);
+    printf("===== pp =====\n");
+    print_pp(pp);
     
     struct SKey sk;
     init_skey(&sk, l, pairing, g, gt);
@@ -69,11 +71,14 @@ int main() {
     struct EnInput eni;
     element_t *m;
     m = (element_t*) malloc(sizeof(element_t) * (l-1));
+    printf("===== m =====\nm:");
     for (int i = 0; i < l-1; i++) {
         element_init_Zr(m[i], pairing);
         rnd_non_zero(m[i]);
+        element_printf(" %B", m[i]);
     }
-    init_eninput(&eni, fk, sk, m, l, g, gt, pairing);
+    printf("\n");
+    init_eninput(&eni, fk, sk, m, pp, g, gt, pairing);
     printf("===== eni =====\n");
     print_eninput(eni);
 
@@ -84,13 +89,22 @@ int main() {
     printf("===== omega =====\n");
     print_omega(omega);
 
-    free_skey(sk);
-    free_vkey(vk);
-    free_srkey(srk);
-    free_vrkey(vrk);
-    free_eninput(eni);
-    free(m);
-    free_omega(omega);
+    struct Result r;
+    element_t fpk[1];
+    element_init_GT(fpk[0], pairing);
+    element_set(fpk[0], fk.pk);
+    int yl = verify(&r, vk.mk, omega, fpk, 1, pp, g, gt, pairing);
+    printf("===== r(%d) =====\n", yl);
+    print_result(r);
+
+    // free_skey(sk);
+    // free_vkey(vk);
+    // free_srkey(srk);
+    // free_vrkey(vrk);
+    // free_eninput(eni);
+    // free(m);
+    // free_omega(omega);
+    // free_result(r);
 
     return 0;
 }

@@ -55,6 +55,6 @@ void print_enfunc(struct EnFunc);
 // Deprecated
 void H(element_t, element_t, element_t, element_t, element_t, pairing_t);
 
-void init_eninput(struct EnInput *, struct FKey, struct SKey, element_t *, int, element_t, element_t, pairing_t);
+void init_eninput(struct EnInput *, struct FKey, struct SKey, element_t *, struct PP, element_t, element_t, pairing_t);
 void print_eninput(struct EnInput);
 void free_eninput(struct EnInput);

@@ -6,6 +6,11 @@
  * Try your best to understand!
  */
 
+struct PP {
+    element_t *g;
+    int l;
+};
+
 struct ID {
     element_t g_beta;
 };
@@ -68,6 +73,10 @@ struct VRKey {
     struct AK ak;
     int n;
 };
+
+void init_pp(struct PP *, int, pairing_t);
+void print_pp(struct PP);
+void free_pp(struct PP *);
 
 void init_skey(struct SKey *, int, pairing_t, element_t, element_t);
 void print_skey(struct SKey);
