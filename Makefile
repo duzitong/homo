@@ -14,5 +14,9 @@ keygen.o : keygen.c keygen.h utils.h
 	gcc -c keygen.c
 utils.o : utils.c utils.h
 	gcc -c utils.c
+
+test:
+	gcc test.c -L. -lpbc -lgmp -o test
+
 clean :
-	rm homo *.o
+	rm homo test *.o
