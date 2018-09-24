@@ -13,8 +13,8 @@ int main() {
     element_init_G1(g, pairing);
     element_init_G1(h, pairing);
     element_init_GT(gt, pairing);
-    element_set_str(g, "[9, 4]", 10);
-    element_set_str(h, "[5, 4]", 10);
+    element_set_str(g, "[5, 4]", 10);
+    element_set_str(h, "[9, 4]", 10);
     element_pairing(gt, g, h);
 
     element_printf("g: %B\n", g);
