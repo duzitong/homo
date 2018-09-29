@@ -13,10 +13,11 @@ int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, i
 
     for (int t = 0; t < l-1; t++) {
         element_invert(tmpr, mk.a2[t]);
+        element_neg(tmpr, tmpr);
         element_pow_zn(tmpt, omega.cp.e_g_k_rk[t], tmpr);
         element_mul(tmpt, omega.cp.gt_m_gt_a1_k[t], tmpt);
         element_init_Zr(r->y[t], pairing);
-        element_dlog_pollard_rho(r->y[t], gt, tmpt);
+        element_dlog_brute_force(r->y[t], gt, tmpt);
     }
 
     element_invert(tmpr, mk.a2[l-1]);
@@ -24,7 +25,7 @@ int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, i
     element_pow_zn(tmpt, omega.cp.e_g_k_rk[l-1], tmpr);
     element_mul(tmpt, omega.cp.gt_r_gt_a1_k, tmpt);
     element_init_Zr(r->y[l-1], pairing);
-    element_dlog_pollard_rho(r->y[l-1], gt, tmpt);
+    element_dlog_brute_force(r->y[l-1], gt, tmpt);
 
     r->l = l;
 
