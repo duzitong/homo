@@ -20,6 +20,7 @@ int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, i
     }
 
     element_invert(tmpr, mk.a2[l-1]);
+    element_neg(tmpr, tmpr);
     element_pow_zn(tmpt, omega.cp.e_g_k_rk[l-1], tmpr);
     element_mul(tmpt, omega.cp.gt_r_gt_a1_k, tmpt);
     element_init_Zr(r->y[l-1], pairing);
