@@ -16,13 +16,13 @@ int main() {
     int l = 2;
 
     // init g & gt
-    element_t g, h, gt;
+    element_t g, gt;
     element_init_G1(g, pairing);
-    element_init_G1(h, pairing);
     rnd_non_zero(g);
-    rnd_non_zero(h);
+    element_printf("g: %B", g);
     element_init_GT(gt, pairing);
-    element_pairing(gt, g, h);
+    element_pairing(gt, g, g);
+    element_printf("gt: %B", gt);
 
     struct PP pp;
     init_pp(&pp, l, pairing);

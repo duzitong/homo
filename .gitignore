@@ -1,4 +1,5 @@
 homo
 test
+gen
 *.o
 .vscode
