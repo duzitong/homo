@@ -1,11 +1,12 @@
 #include "verify.h"
 
 int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, int n, struct PP pp, element_t g, element_t gt, pairing_t pairing) {
-    element_t tmpt, tmpr, tmp1, tmpt2;
+    element_t tmpt, tmpr, tmp1, tmpt2, tmp3;
     element_init_GT(tmpt, pairing);
     element_init_GT(tmpt2, pairing);
     element_init_Zr(tmpr, pairing);
     element_init_G1(tmp1, pairing);
+    element_init_G1(tmp3, pairing);
 
     int l = omega.cp.l;
 
@@ -30,7 +31,8 @@ int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, i
     
     element_set1(tmp1);
     for (int i = 0; i < pp.l; i++) {
-        element_mul(tmp1, tmp1, pp.g[i]);
+        element_pow_zn(tmp3, pp.g[i], r->y[i]);
+        element_mul(tmp1, tmp1, tmp3);
     }
     element_pairing(tmpt2, tmp1, g);
     element_mul(tmpt, tmpt, tmpt2);
