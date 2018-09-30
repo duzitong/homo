@@ -15,11 +15,11 @@ keygen.o : keygen.c keygen.h utils.h
 utils.o : utils.c utils.h
 	gcc -c utils.c
 
-test:
+test: test.c
 	gcc test.c -L. -lpbc -lgmp -o test
 
-gen:
+gen: prime.c
 	gcc prime.c -L. -lpbc -lgmp -o gen
 
 clean :
-	rm homo test *.o
+	rm homo test gen *.o

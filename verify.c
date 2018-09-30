@@ -17,6 +17,7 @@ int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, i
         element_pow_zn(tmpt, omega.cp.e_g_k_rk[t], tmpr);
         element_mul(tmpt, omega.cp.gt_m_gt_a1_k[t], tmpt);
         element_init_Zr(r->y[t], pairing);
+        element_printf("Computing dlog round %d: %B\n", t, tmpt);
         element_dlog_brute_force(r->y[t], gt, tmpt);
     }
 

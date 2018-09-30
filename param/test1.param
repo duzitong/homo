@@ -1,4 +1,8 @@
-type a1
-p 65521
-n 181
-l 362
+type a
+q 1523
+h 12
+r 127
+exp2 8
+exp1 7
+sign1 -1
+sign0 -1
