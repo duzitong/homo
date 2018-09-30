@@ -11,7 +11,7 @@ int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, i
 
     r->y = (element_t*) malloc(sizeof(element_t) * l);
 
-    for (int t = 0; t < l-1; t++) {
+    for (int t = 0; t < l; t++) {
         element_invert(tmpr, mk.a2[t]);
         element_neg(tmpr, tmpr);
         element_pow_zn(tmpt, omega.cp.e_g_k_rk[t], tmpr);
@@ -19,13 +19,6 @@ int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, i
         element_init_Zr(r->y[t], pairing);
         element_dlog_brute_force(r->y[t], gt, tmpt);
     }
-
-    element_invert(tmpr, mk.a2[l-1]);
-    element_neg(tmpr, tmpr);
-    element_pow_zn(tmpt, omega.cp.e_g_k_rk[l-1], tmpr);
-    element_mul(tmpt, omega.cp.gt_r_gt_a1_k, tmpt);
-    element_init_Zr(r->y[l-1], pairing);
-    element_dlog_brute_force(r->y[l-1], gt, tmpt);
 
     r->l = l;
 
@@ -35,7 +28,7 @@ int verify(struct Result *r, struct MK mk, struct Omega omega, element_t *fpk, i
     }
     
     element_set1(tmp1);
-    for (int i = 0; i < pp.l-1; i++) {
+    for (int i = 0; i < pp.l; i++) {
         element_mul(tmp1, tmp1, pp.g[i]);
     }
     element_pairing(tmpt2, tmp1, g);

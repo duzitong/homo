@@ -13,7 +13,7 @@ int main() {
     if (!count) pbc_die("input error");
     pairing_init_set_buf(pairing, param, count);
 
-    int l = 4;
+    int l = 2;
 
     // init g & gt
     element_t g, h, gt;
@@ -70,9 +70,9 @@ int main() {
 
     struct EnInput eni;
     element_t *m;
-    m = (element_t*) malloc(sizeof(element_t) * (l-1));
+    m = (element_t*) malloc(sizeof(element_t) * (l));
     printf("===== m =====\nm:");
-    for (int i = 0; i < l-1; i++) {
+    for (int i = 0; i < l; i++) {
         element_init_Zr(m[i], pairing);
         rnd_non_zero(m[i]);
         element_printf(" %B", m[i]);

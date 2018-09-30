@@ -31,7 +31,6 @@ struct EnFunc {
 struct C {
     element_t g_k;
     element_t *gt_m_gt_a1_k;
-    element_t gt_r_gt_a1_k;
     char flag;
     int l;
 };

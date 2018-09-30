@@ -27,20 +27,16 @@ void compute(struct Omega *omega, struct PK *pk, struct Phi phi, struct EnInput 
     }
 
     // cp[2]
-    omega->cp.gt_m_gt_a1_k = (element_t*) malloc(sizeof(element_t) * (l-1));
-    for (int t = 0; t < l-1; t++) {
+    omega->cp.gt_m_gt_a1_k = (element_t*) malloc(sizeof(element_t) * (l));
+    for (int t = 0; t < l; t++) {
         element_init_GT(omega->cp.gt_m_gt_a1_k[t], pairing);
         element_set1(omega->cp.gt_m_gt_a1_k[t]);
     }
-    element_init_GT(omega->cp.gt_r_gt_a1_k, pairing);
-    element_set1(omega->cp.gt_r_gt_a1_k);
     for (int j = 0; j < n; j++) {
-        for (int t = 0; t < l-1; t++) {
+        for (int t = 0; t < l; t++) {
             element_pow_zn(tmp, eni[j].c.gt_m_gt_a1_k[t], phi.f.q[j]);
             element_mul(omega->cp.gt_m_gt_a1_k[t], omega->cp.gt_m_gt_a1_k[t], tmp);
         }
-        element_pow_zn(tmp, eni[j].c.gt_r_gt_a1_k, phi.f.q[n-1]);
-        element_mul(omega->cp.gt_r_gt_a1_k, omega->cp.gt_r_gt_a1_k, tmp);
     }
 
     omega->cp.flag = 'R';
@@ -64,11 +60,10 @@ void print_omega(struct Omega omega) {
     }
     element_printf("\n");
     element_printf("    gt_m_gt_a1_k:");
-    for (int i = 0; i < omega.cp.l-1; i++) {
+    for (int i = 0; i < omega.cp.l; i++) {
         element_printf(" %B", omega.cp.gt_m_gt_a1_k[i]);
     }
     element_printf("\n");
-    element_printf("    gt_r_gt_a1_k: %B\n", omega.cp.gt_r_gt_a1_k);
     element_printf("    flag: %c\n", omega.cp.flag);
     element_printf("sigma: %B\n", omega.sigma);
 }

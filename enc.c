@@ -95,13 +95,7 @@ void H(element_t mu, element_t g_a, element_t x, element_t g, element_t y, pairi
 
 void init_eninput(struct EnInput *eni, struct FKey fk, struct SKey sk, element_t *m, struct PP pp, element_t g, element_t gt, pairing_t pairing) {
     int l = pp.l;
-    element_t x,y,r,k;
-    element_init_Zr(x, pairing);
-    rnd_non_zero(x);
-    element_init_Zr(y, pairing);
-    rnd_non_zero(y);
-    element_init_Zr(r, pairing);
-    rnd_non_zero(r);
+    element_t k;
     element_init_Zr(k, pairing);
     rnd_non_zero(k);
 
@@ -113,7 +107,7 @@ void init_eninput(struct EnInput *eni, struct FKey fk, struct SKey sk, element_t
     element_pp_init(gt_pp, gt);
     element_t tmp;
     element_init_G1(tmp, pairing);
-    for (int i = 0; i < l-1; i++) {
+    for (int i = 0; i < l; i++) {
         element_pow_zn(tmp, pp.g[i], m[i]);
         element_mul(eni->sigma, eni->sigma, tmp);
     }
@@ -121,21 +115,16 @@ void init_eninput(struct EnInput *eni, struct FKey fk, struct SKey sk, element_t
 
     element_init_G1(eni->c.g_k, pairing);
     element_pp_pow_zn(eni->c.g_k, k, g_pp);
-    eni->c.gt_m_gt_a1_k = (element_t*) malloc(sizeof(element_t) * (l-1));
+    eni->c.gt_m_gt_a1_k = (element_t*) malloc(sizeof(element_t) * (l));
     element_t gt_m, gt_a1_k;
     element_init_GT(gt_m, pairing);
     element_init_GT(gt_a1_k, pairing);
-    for (int i = 0; i < l-1; i++) {
+    for (int i = 0; i < l; i++) {
         element_init_GT(eni->c.gt_m_gt_a1_k[i], pairing);
         element_pp_pow_zn(gt_m, m[i], gt_pp);
         element_pow_zn(gt_a1_k, sk.pk.gt_a1[i], k);
         element_mul(eni->c.gt_m_gt_a1_k[i], gt_m, gt_a1_k);
     }
-
-    element_init_GT(eni->c.gt_r_gt_a1_k, pairing);
-    element_pp_pow_zn(gt_m, r, gt_pp);
-    element_pow_zn(gt_a1_k, sk.pk.gt_a1[l-1], k);
-    element_mul(eni->c.gt_r_gt_a1_k, gt_m, gt_a1_k);
     eni->c.flag = '2';
 
     eni->l = l;
@@ -149,12 +138,10 @@ void print_eninput(struct EnInput eni) {
     element_printf("c:\n");
     element_printf("    g_k: %B\n", eni.c.g_k);
     element_printf("    gt_m_gt_a1_k:");
-    for (int i = 0; i < eni.l - 1; i++) {
+    for (int i = 0; i < eni.l; i++) {
         element_printf(" %B", eni.c.gt_m_gt_a1_k[i]);
     }
     element_printf("\n");
-    element_printf("    gt_r_gt_a1_k: %B\n", eni.c.gt_r_gt_a1_k);
-    element_printf("    flag: %c\n", eni.c.flag);
 }
 
 void free_eninput(struct EnInput eni) {

@@ -5,7 +5,6 @@
 struct CP {
     element_t *e_g_k_rk;
     element_t *gt_m_gt_a1_k;
-    element_t gt_r_gt_a1_k;
     char flag;
     int l;
 };
