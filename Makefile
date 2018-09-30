@@ -18,5 +18,8 @@ utils.o : utils.c utils.h
 test:
 	gcc test.c -L. -lpbc -lgmp -o test
 
+gen:
+	gcc prime.c -L. -lpbc -lgmp -o gen
+
 clean :
 	rm homo test *.o
