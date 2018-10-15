@@ -10,6 +10,16 @@ void init_f(struct F *f, int n, pairing_t pairing) {
     f->n = n;
 }
 
+void init_f_with_length_limited(struct F *f, int n, pairing_t pairing, int bits) {
+    f->q = (element_t*) malloc(sizeof(element_t) * n);
+    for (int i = 0; i < n; i++) {
+        element_init_Zr(f->q[i], pairing);
+        rnd_with_length_limited(f->q[i], bits);
+    }
+
+    f->n = n;
+}
+
 void print_f(struct F f) {
     element_printf("q:");
     for (int i = 0; i < f.n; i++) {
