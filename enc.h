@@ -42,7 +42,7 @@ struct EnInput {
 };
 
 void init_f(struct F *, int, pairing_t);
-void init_f_with_length_limited(struct F *, int, pairing_t);
+void init_f_with_length_limited(struct F *, int, pairing_t, int);
 void print_f(struct F);
 void free_f(struct F);
 
