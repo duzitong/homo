@@ -14,4 +14,4 @@ struct Kangaroo {
 };
 
 int init_kangaroo(struct Kangaroo *, unsigned int, unsigned int, element_t, pairing_t, int);
-int element_dlog_pollard_kangaroo(element_t, element_t, element_t, struct Kangaroo, pairing_t);
+int element_dlog_pollard_kangaroo(element_t, element_t, element_t, struct Kangaroo);

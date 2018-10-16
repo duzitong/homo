@@ -52,7 +52,7 @@ int init_kangaroo(struct Kangaroo *k, unsigned int size, unsigned int rounds, el
     return 0;
 }
 
-int element_dlog_pollard_kangaroo(element_t x, element_t g, element_t h, struct Kangaroo k, pairing_t pairing) {
+int element_dlog_pollard_kangaroo(element_t x, element_t g, element_t h, struct Kangaroo k) {
     int failed = 1;
     element_t wild, tmp;
     element_pp_t g_pp;
