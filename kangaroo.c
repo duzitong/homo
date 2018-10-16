@@ -44,8 +44,6 @@ int init_kangaroo(struct Kangaroo *k, unsigned int size, unsigned int rounds, el
         }
     }
 
-    element_printf("trap: %B\n", k->trap);
-
     mpz_clear(h);
     mpz_clear(tmpx);
     mpz_clear(tmpy);
@@ -78,7 +76,6 @@ int element_dlog_pollard_kangaroo(element_t x, element_t g, element_t h, struct 
             mpz_set_ui(tmph, step);
             element_pp_pow(tmp, tmph, g_pp);
             element_mul(wild, wild, tmp);
-            element_printf("wild: %B\n", wild);
             if (!element_cmp(wild, k.trap)) {
                 failed = 0;
                 break;
@@ -99,7 +96,6 @@ int element_dlog_pollard_kangaroo(element_t x, element_t g, element_t h, struct 
             mpz_set_ui(tmph, step);
             element_pp_pow(tmp, tmph, g_pp);
             element_mul(wild, wild, tmp);
-            element_printf("wild: %B\n", wild);
             if (!element_cmp(wild, k.trap)) {
                 failed = 0;
                 break;
