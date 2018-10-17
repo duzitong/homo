@@ -5,6 +5,8 @@
 #include "compute.h"
 #include "verify.h"
 
+#define MAX_BITS 10
+
 int main() {
     // init pairing
     pairing_t pairing;
@@ -62,7 +64,7 @@ int main() {
     print_vrkey(vrk);
 
     struct F f;
-    init_f(&f, 2, pairing);
+    init_f_with_length_limited(&f, 2, pairing, MAX_BITS);
     printf("===== f =====\n");
     print_f(f);
 
@@ -86,14 +88,14 @@ int main() {
     printf("===== m1 =====\nm:");
     for (int i = 0; i < l; i++) {
         element_init_Zr(m1[i], pairing);
-        rnd_non_zero(m1[i]);
+        rnd_with_length_limited(m1[i], MAX_BITS);
         element_printf(" %B", m1[i]);
     }
     printf("\n");
     printf("===== m2 =====\nm:");
     for (int i = 0; i < l; i++) {
         element_init_Zr(m2[i], pairing);
-        rnd_non_zero(m2[i]);
+        rnd_with_length_limited(m2[i], MAX_BITS);
         element_printf(" %B", m2[i]);
     }
     printf("\n");
