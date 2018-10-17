@@ -5,6 +5,7 @@ int init_kangaroo(struct Kangaroo *k, unsigned int size, unsigned int rounds, el
     if (type != 0 && type != 1) return 1;
 
     k->size = size;
+    k->rounds = rounds;
     k->type = type;
 
     element_init_same_as(k->trap, g);
@@ -89,7 +90,6 @@ int element_dlog_pollard_kangaroo(element_t x, element_t g, element_t h, struct 
             element_to_mpz(tmpx, element_x(wild));
             element_to_mpz(tmpy, element_y(wild));
             mpz_add(tmph, tmpx, tmpy);
-            element_to_mpz(tmph, wild);
             mpz_mod_ui(tmph, tmph, k.size);
             unsigned int step = 1 << mpz_get_ui(tmph);
             mpz_add_ui(Bn, Bn, step);

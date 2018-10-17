@@ -1,6 +1,6 @@
 #pragma once
-#include "utils.h"
 #include <stdio.h>
+#include <pbc/pbc.h>
 
 /*
  * ref: https://web.northeastern.edu/seigen/11Magic/KruskalsCount/CryptographyKangaroosCardTricks.pdf
@@ -8,6 +8,7 @@
 
 struct Kangaroo {
     unsigned int size;
+    unsigned int rounds;
     int type; // 0 - int group, 1 - elliptic curve
     element_t trap;
     mpz_t Am;

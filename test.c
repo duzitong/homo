@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <pbc/pbc.h>
+#include "utils.h"
 #include "kangaroo.h"
 
 int main() {
@@ -19,7 +20,7 @@ int main() {
     element_init_GT(gt, pairing);
     element_init_GT(gtp, pairing);
     element_init_Zr(p, pairing);
-    element_set_si(p, 100);
+    element_set_si(p, 1073740000);
     rnd_non_zero(g);
     rnd_non_zero(h);
     element_pairing(gt, g, g);
@@ -31,8 +32,10 @@ int main() {
     // element_printf("gt: %B\n", gt);
 
     struct Kangaroo k;
-    init_kangaroo(&k, 3, 1000, g, pairing, 1);
-    int failed = element_dlog_pollard_kangaroo(ans, g, gp, k, pairing);
+    printf("Initializing...\n");
+    init_kangaroo(&k, 20, 65536, g, pairing, 1);
+    printf("Calculating...\n");
+    int failed = element_dlog_pollard_kangaroo(ans, g, gp, k);
     element_printf("ans(%d): %B\n", failed, ans);
 
     return 0;

@@ -12,7 +12,7 @@ enc.o: enc.c enc.h keygen.h
 	gcc -c enc.c
 keygen.o : keygen.c keygen.h utils.h
 	gcc -c keygen.c
-kangaroo.o: kangaroo.c kangaroo.h utils.h
+kangaroo.o: kangaroo.c kangaroo.h
 	gcc -c kangaroo.c
 utils.o : utils.c utils.h
 	gcc -c utils.c
